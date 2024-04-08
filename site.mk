@@ -17,11 +17,11 @@ GLUON_FEATURES := \
 	web-wizard
 
 GLUON_SITE_PACKAGES := \
+	ff-ap-timer \
+	ff-web-ap-timer \
 	ffac-autoupdater-wifi-fallback \
 	ffac-change-autoupdater \
 	ffac-ssid-changer \
-	ffho-ap-timer \
-	ffho-web-ap-timer \
 	ffmuc-ipv6-ra-filter \
 	ffmuc-mesh-vpn-wireguard-vxlan \
 	iwinfo \
@@ -151,6 +151,12 @@ INCLUDE_PCI_NET := \
 EXCLUDE_PCI_NET := \
     -kmod-bnx2
 
+INCLUDE_VIRT := \
+    qemu-ga
+
+EXCLUDE_VIRT := \
+    -qemu-ga
+
 INCLUDE_TLS := \
     ca-bundle \
     libustream-openssl
@@ -158,6 +164,12 @@ INCLUDE_TLS := \
 EXCLUDE_TLS := \
     -ca-bundle \
     -libustream-openssl
+
+INCLUDE_NSM := \
+    ffda-network-setup-mode
+
+EXCLUDE_NSM := \
+    -ffda-network-setup-mode
 
 ifeq ($(GLUON_TARGET),ath79-generic)
     GLUON_SITE_PACKAGES += $(INCLUDE_TLS)
@@ -178,8 +190,10 @@ ifeq ($(GLUON_TARGET),ath79-generic)
     GLUON_d-link-dir825b1_SITE_PACKAGES += $(EXCLUDE_TLS)
 endif
 
-# no pkglists for target ath79-mikrotik
+ifeq ($(GLUON_TARGET),ath79-mikrotik)
+    GLUON_SITE_PACKAGES += $(INCLUDE_TLS) $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
 
+endif
 
 ifeq ($(GLUON_TARGET),ath79-nand)
     GLUON_SITE_PACKAGES += $(INCLUDE_TLS) $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
@@ -211,8 +225,10 @@ ifeq ($(GLUON_TARGET),ipq40xx-generic)
 
 endif
 
-# no pkglists for target ipq40xx-mikrotik
+ifeq ($(GLUON_TARGET),ipq40xx-mikrotik)
+    GLUON_SITE_PACKAGES += $(INCLUDE_TLS) $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
 
+endif
 
 ifeq ($(GLUON_TARGET),ipq806x-generic)
     GLUON_SITE_PACKAGES += $(INCLUDE_TLS) $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
@@ -262,9 +278,11 @@ endif
 ifeq ($(GLUON_TARGET),ramips-mt7621)
     GLUON_SITE_PACKAGES += $(INCLUDE_TLS) $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
 
+    GLUON_zyxel-nwa55axe_SITE_PACKAGES += $(INCLUDE_NSM)
     GLUON_netgear-ex6150_SITE_PACKAGES += $(EXCLUDE_USB) $(EXCLUDE_USB_NET) $(EXCLUDE_USB_SERIAL) $(EXCLUDE_USB_STORAGE)
     GLUON_ubiquiti-edgerouter-x_SITE_PACKAGES += $(EXCLUDE_USB) $(EXCLUDE_USB_NET) $(EXCLUDE_USB_SERIAL) $(EXCLUDE_USB_STORAGE)
     GLUON_ubiquiti-edgerouter-x-sfp_SITE_PACKAGES += $(EXCLUDE_USB) $(EXCLUDE_USB_NET) $(EXCLUDE_USB_SERIAL) $(EXCLUDE_USB_STORAGE)
+    GLUON_zyxel-nwa55axe_SITE_PACKAGES += $(EXCLUDE_USB) $(EXCLUDE_USB_NET) $(EXCLUDE_USB_SERIAL) $(EXCLUDE_USB_STORAGE)
 endif
 
 ifeq ($(GLUON_TARGET),ramips-mt76x8)
@@ -274,7 +292,6 @@ ifeq ($(GLUON_TARGET),ramips-mt76x8)
     GLUON_gl.inet-microuter-n300_SITE_PACKAGES += $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
     GLUON_netgear-r6120_SITE_PACKAGES += $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
     GLUON_ravpower-rp-wd009_SITE_PACKAGES += $(INCLUDE_USB) $(INCLUDE_USB_NET) $(INCLUDE_USB_SERIAL) $(INCLUDE_USB_STORAGE)
-    GLUON_tp-link-re305_SITE_PACKAGES += $(EXCLUDE_TLS)
 endif
 
 ifeq ($(GLUON_TARGET),rockchip-armv8)
